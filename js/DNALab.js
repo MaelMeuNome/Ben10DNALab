@@ -1191,6 +1191,30 @@ aliens.forEach(function(alien) {
                     }, 40);
                 }
 
+                function habilitarEnterNoInput(inputElement, callback) {
+                    inputElement.addEventListener('keydown', function(event) {
+                        if (event.key === 'Enter') {
+                            event.preventDefault();
+
+                            // 1. Prioridade: Se o campo de input está ativo (visível), faz o Submit
+                            if (parseInt(inputElement.style.zIndex) > 0) {
+                                callback();
+                            } 
+                            // 2. Se o input NÃO está ativo, mas o erro está, tenta o Back
+                            else if (parseInt(backbutton.style.zIndex) > 0) {
+                                backbutton.click();
+                            } 
+                            else if (parseInt(backbutton2.style.zIndex) > 0) {
+                                backbutton2.click();
+                            }
+                        }
+                    });
+                }
+
+                // Aplicando aos seus inputs:
+                habilitarEnterNoInput(newInput1, submit1);
+                habilitarEnterNoInput(newInput2, submit2);
+
                 //Ao clicar no submit button 1
                 submitbutton1.onclick = function() {
                     submit1();
