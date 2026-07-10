@@ -53,6 +53,16 @@ body {
     }
 }
 
+/* Bloqueia o zoom automático em inputs e selects */
+input, select {
+    font-size: 16px !important;
+}
+
+/* Garante que o container também não sofra zoom */
+html, body {
+    touch-action: manipulation; /* Melhora a resposta ao toque */
+}
+
 *::selection {
     background: none;
 }
