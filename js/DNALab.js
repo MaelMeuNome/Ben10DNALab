@@ -194,6 +194,28 @@
         newInput2.type = "text";
         newInput2.maxLength = 4;
 
+        var customDropdown = null;
+
+        document.addEventListener("click", function(event) {
+        // Verifica se o dropdown existe e está visível
+        if (customDropdown && customDropdown.style.display !== "none") {
+            
+            // Verifica se o clique NÃO foi no próprio dropdown
+            // (Isso inclui qualquer clique dentro dele, como as imagens ou nomes)
+            if (!customDropdown.contains(event.target)) {
+                
+                // Fecha a lista (assumindo que sua lista está dentro do dropdown)
+                var list = customDropdown.querySelector("div[style*='display']"); // ou use uma classe específica
+                // Ou mais simples, se a lista for um filho direto:
+                var list = customDropdown.children[1]; 
+                
+                if (list) {
+                    list.style.display = "none";
+                }
+            }
+        }
+    });
+
         // Função para garantir que apenas letras sejam aceitas
         function aplicarFiltroDeLetras(inputElement) {
             inputElement.addEventListener('input', function() {
@@ -454,6 +476,7 @@ textContainer.style.color = "lime";
 textContainer.style.cursor = "default";
 document.body.appendChild(textContainer);
 
+
 function fixarCursorNoFinal(inputElement) {
     inputElement.addEventListener('click', function() {
         // Quando clicar, move o cursor para o final do texto
@@ -520,45 +543,6 @@ var aliens = [
     {name: "Gwen", code: "mura"}, {name: "Vilgax", code: "akec"},
     {name: "GreyMatter", code: "gujh"}
 ];
-
-// Criar o elemento select (dropdown)
-var selectAlien = document.createElement("select");
-selectAlien.id = "alien-dropdown";
-// Dropdown de Aliens
-selectAlien.style.position = "absolute";
-// Usamos o offset do canvas como base, igual ao soundimg1
-selectAlien.style.left = (interactivecanvas.offsetLeft + 250) + "px"; // Ajuste o valor para a posição X desejada
-selectAlien.style.top = (interactivecanvas.offsetTop + 80) + "px";  // Ajuste o valor para a posição Y desejada
-selectAlien.style.zIndex = "6";
-selectAlien.style.fontFamily = "HouseSampler";
-selectAlien.style.fontSize = "18px";
-
-// 1. Criação da opção padrão (o placeholder)
-var optionDefault = document.createElement("option");
-optionDefault.text = "SELECT TARGET";
-optionDefault.value = "SELECT TARGET"; // Mantenha o valor igual ao texto
-optionDefault.disabled = true;        // Impede que o usuário selecione novamente
-optionDefault.selected = true;        // Começa selecionado
-selectAlien.add(optionDefault);
-
-// Adiciona os aliens...
-aliens.forEach(function(alien) {
-    var option = document.createElement("option");
-    option.text = alien.name /*+ " (" + alien.code + ")"*/;
-    option.value = alien.code;
-    selectAlien.add(option);
-});
-
-// Lógica de esconder o texto
-selectAlien.addEventListener('focus', function() {
-    this.options[0].style.display = 'none'; // Esconde o "SELECT TARGET"
-});
-
-selectAlien.addEventListener('blur', function() {
-    this.options[0].style.display = 'block'; // Volta a mostrar quando fechar
-});
-
-document.body.appendChild(selectAlien);
 
         //Submit Button Animations
         var bc = 1;
@@ -1475,54 +1459,127 @@ document.body.appendChild(selectAlien);
                     downloadandprint.style.cursor = "url(images/cursor/cursor.cur), pointer";
                 }
 
-            selectAlien.onchange = function() {
-                var selectedValue = this.value;
-                if (selectedValue === "SELECT TARGET") return;
+function createCustomDropdown(aliens, targetSelect) {
+    // 1. Cria o container principal
+    var dropdown = document.createElement("div");
+    dropdown.style.position = "absolute";
+    dropdown.style.left = (interactivecanvas.offsetLeft + 250) + "px";
+    dropdown.style.top = (interactivecanvas.offsetTop + 80) + "px";
+    dropdown.style.zIndex = "100";
+    dropdown.style.width = "200px";
+    dropdown.style.fontFamily = "HouseSampler";
+    dropdown.style.fontSize = "18px";
+    dropdown.style.background = "#000";
+    dropdown.style.border = "2px solid lime";
+    dropdown.style.color = "lime";
+    dropdown.style.cursor = "pointer";
+    dropdown.innerHTML = '<div style="padding: 10px;">SELECT TARGET</div>';
 
-                // 1. Armazena o alien que o usuário quer, antes de qualquer reset
-                pendingAlien = selectedValue;
+    // 2. Cria a lista de opções (o "menu")
+    var list = document.createElement("div");
+    list.style.display = "none";
+    list.style.maxHeight = "200px"; // Isso limita o tamanho (aprox. 5 itens)
+    list.style.overflowY = "auto";  // Ativa o scroll
+    list.style.borderTop = "1px solid lime";
 
-                // 2. Lógica de Erro / Limpeza
-                var needsReset = false;
-                
-                if (parseInt(startover.style.width) > 0) {
-                    startover.click();
-                    needsReset = true;
-                } else if (parseInt(backbutton.style.zIndex) > 0) {
-                    backbutton.click();
-                    needsReset = true;
-                } else if (parseInt(backbutton2.style.zIndex) > 0) {
-                    backbutton2.click();
-                    needsReset = true;
+        // 3. Popula os aliens na lista
+    aliens.forEach(function(alien) {
+        var item = document.createElement("div");
+        item.style.padding = "8px";
+        item.style.display = "flex";          // Alinha imagem e texto
+        item.style.alignItems = "center";     // Centraliza verticalmente
+        item.style.cursor = "pointer";
+        item.style.borderBottom = "1px solid #333";
+
+        // Criação da Imagem
+        var img = document.createElement("img");
+        img.src = "images/bg/DNALab/inputs/aliens/" + alien.code + ".png"; // Ajuste o caminho da pasta aqui
+        img.style.width = "30px";  // Tamanho fixo para o ícone
+        img.style.height = "30px";
+        img.style.marginRight = "10px";
+        img.style.borderRadius = "4px"; // Um toque estético
+
+        // Criação do Texto
+        var span = document.createElement("span");
+        span.innerHTML = alien.name;
+
+        item.appendChild(img);
+        item.appendChild(span);
+
+        // O evento de clique continua o mesmo
+        item.onclick = function(e) {
+            e.stopPropagation();
+            processAlienSelection(alien.code);
+            list.style.display = 'none'; // Agora vai fechar!
+            //dropdown.firstChild.innerHTML = alien.name; // Atualiza o label
+        };
+        
+        list.appendChild(item);
+    });
+
+    // 4. Lógica de abertura/fechamento
+    dropdown.onclick = function() {
+        list.style.display = (list.style.display === "none") ? "block" : "none";
+    };
+
+    dropdown.appendChild(list);
+    document.body.appendChild(dropdown);
+    return dropdown;
+}
+
+// Esta é a função que você chamará no 'onclick' de cada item do seu Dropdown Customizado
+function processAlienSelection(alienCode) {
+    if (alienCode === "SELECT TARGET") return;
+
+    // 1. Armazena o alien no buffer (o pendingAlien global que já existia)
+    pendingAlien = alienCode;
+
+    // 2. Lógica de Erro / Limpeza
+    var needsReset = false;
+    
+    if (parseInt(startover.style.width) > 0) {
+        startover.click();
+        needsReset = true;
+    } else if (parseInt(backbutton.style.zIndex) > 0) {
+        backbutton.click();
+        needsReset = true;
+    } else if (parseInt(backbutton2.style.zIndex) > 0) {
+        backbutton2.click();
+        needsReset = true;
+    }
+
+    // 3. Se houve reset, espera o sistema estabilizar (o setTimeOut continua firme)
+    if (needsReset) {
+        setTimeout(function() {
+            var activeInput = (parseInt(newInput1.style.zIndex) > 0) ? newInput1 : newInput2;
+            if (activeInput) {
+                activeInput.value = pendingAlien;
+                if (activeInput === newInput1) {
+                    submit1();
+                } else {
+                    submitbutton1.style.cursor = "default";
+                    submit2();
                 }
+            }
+            pendingAlien = null; 
+        }, 300);
+        return; // Sai da função, pois o setTimeout vai terminar o serviço
+    }
 
-                // 3. Se houve reset, usa o pendingAlien para preencher após o jogo estar pronto
-                if (needsReset) {
-                    setTimeout(function() {
-                        var activeInput = (parseInt(newInput1.style.zIndex) > 0) ? newInput1 : newInput2;
-                        if (activeInput) {
-                            activeInput.value = pendingAlien;
-                            // Dispara o submit imediatamente após preencher
-                            if (activeInput === newInput1) submit1();
-                            else { submitbutton1.style.cursor = "default"; submit2(); }
-                        }
-                        pendingAlien = null; // Limpa o buffer
-                    }, 300); // 300ms dá tempo da animação do startover/backbutton terminar
-                    
-                    this.value = "SELECT TARGET";
-                    return;
-                }
+    // 4. Fluxo normal (sem necessidade de reset)
+    var activeInput = (parseInt(newInput1.style.zIndex) > 0) ? newInput1 : newInput2;
+    if (activeInput) {
+        activeInput.value = alienCode;
+        if (activeInput === newInput1) {
+            submit1();
+        } else {
+            submitbutton1.style.cursor = "default";
+            submit2();
+        }
+    }
+}
 
-                // 4. Fluxo normal (se não precisou de reset)
-                var activeInput = (parseInt(newInput1.style.zIndex) > 0) ? newInput1 : newInput2;
-                if (activeInput) {
-                    activeInput.value = selectedValue;
-                    if (activeInput === newInput1) submit1();
-                    else { submitbutton1.style.cursor = "default"; submit2(); }
-                }
-
-                this.value = "SELECT TARGET";
-            };
+this.customDropdown = createCustomDropdown(aliens, newInput1); // Chama a função para criar o dropdown
             }
             
             //Execução dos desenhos.

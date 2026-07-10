@@ -4,9 +4,11 @@
             alientext1.style.left = interactivecanvas.offsetLeft + 290;
             alientext1.style.top = interactivecanvas.offsetTop + 428;
 
-            selectAlien.style.left = interactivecanvas.offsetLeft + 250 // Ajuste o valor para a posição X desejada
-            selectAlien.style.top = interactivecanvas.offsetTop + 80  // Ajuste o valor para a posição Y desejada
-
+            if (customDropdown !== null) {
+            customDropdown.style.left = interactivecanvas.offsetLeft + 250 // Ajuste o valor para a posição X desejada
+            customDropdown.style.top = interactivecanvas.offsetTop + 80  // Ajuste o valor para a posição Y desejada
+            }
+            
             //Alien Text 2
             alientext2.style.left = interactivecanvas.offsetLeft + 535;
             alientext2.style.top = interactivecanvas.offsetTop + 428;
