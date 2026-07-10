@@ -7,6 +7,26 @@ canvas {
     margin: auto;
 }
 
+/* Bloqueia seleção de texto e arraste em TUDO */
+body {
+    -webkit-user-select: none; /* Chrome, Safari, Opera */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* Internet Explorer/Edge */
+    user-select: none;         /* Padrão */
+    
+    /* Evita que o usuário arraste qualquer coisa na página */
+    -webkit-user-drag: none;
+    user-drag: none;
+}
+
+/* Re-habilita a seleção APENAS dentro dos inputs */
+input {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
 *::selection {
     background: none;
     color: white;
