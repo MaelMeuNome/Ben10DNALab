@@ -503,22 +503,44 @@ var aliens = [
     {name: "GreyMatter", code: "gujh"}
 ];
 
+// Criar o elemento select (dropdown)
+var selectAlien = document.createElement("select");
+selectAlien.id = "alien-dropdown";
+// Dropdown de Aliens
+selectAlien.style.position = "absolute";
+// Usamos o offset do canvas como base, igual ao soundimg1
+selectAlien.style.left = (interactivecanvas.offsetLeft + 250) + "px"; // Ajuste o valor para a posição X desejada
+selectAlien.style.top = (interactivecanvas.offsetTop + 80) + "px";  // Ajuste o valor para a posição Y desejada
+selectAlien.style.zIndex = "6";
+selectAlien.style.fontFamily = "HouseSampler";
+selectAlien.style.fontSize = "18px";
+
+// 1. Criação da opção padrão (o placeholder)
+var optionDefault = document.createElement("option");
+optionDefault.text = "SELECT TARGET";
+optionDefault.value = "SELECT TARGET"; // Mantenha o valor igual ao texto
+optionDefault.disabled = true;        // Impede que o usuário selecione novamente
+optionDefault.selected = true;        // Começa selecionado
+selectAlien.add(optionDefault);
+
+// Adiciona os aliens...
 aliens.forEach(function(alien) {
-    var line = document.createElement("div");
-    line.innerText = alien.name + ": " + alien.code;
-    line.style.cursor = "pointer"; // O mouse vira uma mãozinha
-    line.style.marginBottom = "5px";
-    
-    // A mágica acontece aqui:
-    line.onclick = function() {
-        // Determina qual input está ativo (o que tem z-index maior que 0)
-        var targetInput = (parseInt(newInput1.style.zIndex) > 0) ? newInput1 : newInput2;
-        targetInput.value = alien.code;
-        targetInput.focus();
-    };
-    
-    textContainer.appendChild(line);
+    var option = document.createElement("option");
+    option.text = alien.name /*+ " (" + alien.code + ")"*/;
+    option.value = alien.code;
+    selectAlien.add(option);
 });
+
+// Lógica de esconder o texto
+selectAlien.addEventListener('focus', function() {
+    this.options[0].style.display = 'none'; // Esconde o "SELECT TARGET"
+});
+
+selectAlien.addEventListener('blur', function() {
+    this.options[0].style.display = 'block'; // Volta a mostrar quando fechar
+});
+
+document.body.appendChild(selectAlien);
 
         //Submit Button Animations
         var bc = 1;
@@ -1434,8 +1456,51 @@ aliens.forEach(function(alien) {
                 downloadandprint.onmouseover = function() {
                     downloadandprint.style.cursor = "url(images/cursor/cursor.cur), pointer";
                 }
-            }
 
+                selectAlien.onchange = function() {
+                    var selectedValue = this.value;
+                    if (selectedValue === "SELECT TARGET") return;
+
+                    // 1. Identifica qual input está ATIVO (visível)
+                    var activeInput = null;
+                    if (parseInt(newInput1.style.zIndex) > 0) activeInput = newInput1;
+                    else if (parseInt(newInput2.style.zIndex) > 0) activeInput = newInput2;
+
+                    // 2. Lógica de Erro / Limpeza (Mantém o que você já tem)
+                    if (parseInt(startover.style.width) > 0) {
+                        startover.click();
+                        this.value = "SELECT TARGET";
+                        return;
+                    }
+                    if (parseInt(backbutton.style.zIndex) > 0) {
+                        backbutton.click();
+                        this.value = "SELECT TARGET";
+                        return;
+                    }
+                    if (parseInt(backbutton2.style.zIndex) > 0) {
+                        backbutton2.click();
+                        this.value = "SELECT TARGET";
+                        return;
+                    }
+
+                    // 3. Só faz o submit se houver um input ativo!
+                    if (activeInput) {
+                        activeInput.value = selectedValue;
+                        activeInput.focus();
+
+                        if (activeInput === newInput1) {
+                            submit1();
+                        } else {
+                            submitbutton1.style.cursor = "default";
+                            submit2();
+                        }
+                    }
+
+                    // 4. Reseta o dropdown
+                    this.value = "SELECT TARGET";
+                };
+            }
+            
             //Execução dos desenhos.
 
             backgroundElements();

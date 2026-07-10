@@ -1,6 +1,5 @@
 var PrimusDB = {
     "rame": {
-        "rame": "imagemdaprerenderdorame",
         "rsam": "images/fusions/rame/ghostfreak",
         "nori": "images/fusions/rame/fourarms",
         "taki": "images/fusions/rame/diamondhead",
