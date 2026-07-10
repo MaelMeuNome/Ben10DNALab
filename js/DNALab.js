@@ -348,7 +348,7 @@
 
         // Crie esta variável globalmente no seu script
         var pendingAlien = null; 
-        
+
         // OTIMIZAÇÃO: Cria uma lista na memória com as imagens já carregadas
         var omnitrixPreloaded = [];
         for (var i = 0; i <= 9; i++) {
@@ -533,21 +533,31 @@ selectAlien.style.zIndex = "6";
 selectAlien.style.fontFamily = "HouseSampler";
 selectAlien.style.fontSize = "18px";
 
-// 1. Criação da opção padrão (o placeholder)
+// 1. Placeholder
 var optionDefault = document.createElement("option");
 optionDefault.text = "SELECT TARGET";
-optionDefault.value = "SELECT TARGET"; // Mantenha o valor igual ao texto
-optionDefault.disabled = true;        // Impede que o usuário selecione novamente
-optionDefault.selected = true;        // Começa selecionado
+optionDefault.value = "SELECT TARGET";
+optionDefault.disabled = true;
+optionDefault.selected = true;
 selectAlien.add(optionDefault);
 
-// Adiciona os aliens...
-aliens.forEach(function(alien) {
+// 2. Adiciona os aliens em grupos de 5
+var grupoAtual;
+aliens.forEach(function(alien, index) {
+    // Cria um novo grupo a cada 5 itens
+    if (index % 5 === 0) {
+        grupoAtual = document.createElement("optgroup");
+        grupoAtual.label = "--- SELECT " + ((index / 5) + 1) + " ---";
+        selectAlien.add(grupoAtual);
+    }
+    
     var option = document.createElement("option");
-    option.text = alien.name /*+ " (" + alien.code + ")"*/;
+    option.text = alien.name;
     option.value = alien.code;
-    selectAlien.add(option);
+    grupoAtual.appendChild(option);
 });
+
+document.body.appendChild(selectAlien);
 
 // Lógica de esconder o texto
 selectAlien.addEventListener('focus', function() {
