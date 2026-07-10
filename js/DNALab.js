@@ -212,20 +212,20 @@
         aplicarFiltroDeLetras(newInput1);
         aplicarFiltroDeLetras(newInput2);
 
-// Verifica se é Android ou iOS
-var isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        // Verifica se é Android ou iOS
+        var isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-// Função para aplicar o estado do input
-function configureInput(inputElement) {
-    if (isMobile) {
-        inputElement.readOnly = true; // Impede que o teclado suba e o zoom ocorra
-        inputElement.style.cursor = "pointer"; // Indica que é clicável, mas não editável
-    }
-}
+        // Função para aplicar o estado do input
+        function configureInput(inputElement) {
+            if (isMobile) {
+                inputElement.readOnly = true; // Impede que o teclado suba e o zoom ocorra
+                inputElement.style.cursor = "pointer"; // Indica que é clicável, mas não editável
+            }
+        }
 
-// Aplique nos seus inputs assim que criá-los:
-configureInput(newInput1);
-configureInput(newInput2);
+        // Aplique nos seus inputs assim que criá-los:
+        configureInput(newInput1);
+        configureInput(newInput2);
 
         //Input Box 1
         inputbox1.style.position = "absolute";
@@ -346,6 +346,9 @@ configureInput(newInput2);
         omnitrixtop.style.zIndex = "2";
         omnitrixtop.src = "images/omnitrix/animation/0.png";
 
+        // Crie esta variável globalmente no seu script
+        var pendingAlien = null; 
+        
         // OTIMIZAÇÃO: Cria uma lista na memória com as imagens já carregadas
         var omnitrixPreloaded = [];
         for (var i = 0; i <= 9; i++) {
@@ -1472,48 +1475,54 @@ document.body.appendChild(selectAlien);
                     downloadandprint.style.cursor = "url(images/cursor/cursor.cur), pointer";
                 }
 
-                selectAlien.onchange = function() {
-                    var selectedValue = this.value;
-                    if (selectedValue === "SELECT TARGET") return;
+            selectAlien.onchange = function() {
+                var selectedValue = this.value;
+                if (selectedValue === "SELECT TARGET") return;
 
-                    // 1. Identifica qual input está ATIVO (visível)
-                    var activeInput = null;
-                    if (parseInt(newInput1.style.zIndex) > 0) activeInput = newInput1;
-                    else if (parseInt(newInput2.style.zIndex) > 0) activeInput = newInput2;
+                // 1. Armazena o alien que o usuário quer, antes de qualquer reset
+                pendingAlien = selectedValue;
 
-                    // 2. Lógica de Erro / Limpeza (Mantém o que você já tem)
-                    if (parseInt(startover.style.width) > 0) {
-                        startover.click();
-                        this.value = "SELECT TARGET";
-                        return;
-                    }
-                    if (parseInt(backbutton.style.zIndex) > 0) {
-                        backbutton.click();
-                        this.value = "SELECT TARGET";
-                        return;
-                    }
-                    if (parseInt(backbutton2.style.zIndex) > 0) {
-                        backbutton2.click();
-                        this.value = "SELECT TARGET";
-                        return;
-                    }
+                // 2. Lógica de Erro / Limpeza
+                var needsReset = false;
+                
+                if (parseInt(startover.style.width) > 0) {
+                    startover.click();
+                    needsReset = true;
+                } else if (parseInt(backbutton.style.zIndex) > 0) {
+                    backbutton.click();
+                    needsReset = true;
+                } else if (parseInt(backbutton2.style.zIndex) > 0) {
+                    backbutton2.click();
+                    needsReset = true;
+                }
 
-                    // 3. Só faz o submit se houver um input ativo!
-                    if (activeInput) {
-                        activeInput.value = selectedValue;
-                        activeInput.focus();
-
-                        if (activeInput === newInput1) {
-                            submit1();
-                        } else {
-                            submitbutton1.style.cursor = "default";
-                            submit2();
+                // 3. Se houve reset, usa o pendingAlien para preencher após o jogo estar pronto
+                if (needsReset) {
+                    setTimeout(function() {
+                        var activeInput = (parseInt(newInput1.style.zIndex) > 0) ? newInput1 : newInput2;
+                        if (activeInput) {
+                            activeInput.value = pendingAlien;
+                            // Dispara o submit imediatamente após preencher
+                            if (activeInput === newInput1) submit1();
+                            else { submitbutton1.style.cursor = "default"; submit2(); }
                         }
-                    }
-
-                    // 4. Reseta o dropdown
+                        pendingAlien = null; // Limpa o buffer
+                    }, 300); // 300ms dá tempo da animação do startover/backbutton terminar
+                    
                     this.value = "SELECT TARGET";
-                };
+                    return;
+                }
+
+                // 4. Fluxo normal (se não precisou de reset)
+                var activeInput = (parseInt(newInput1.style.zIndex) > 0) ? newInput1 : newInput2;
+                if (activeInput) {
+                    activeInput.value = selectedValue;
+                    if (activeInput === newInput1) submit1();
+                    else { submitbutton1.style.cursor = "default"; submit2(); }
+                }
+
+                this.value = "SELECT TARGET";
+            };
             }
             
             //Execução dos desenhos.
