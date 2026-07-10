@@ -1463,10 +1463,10 @@ function createCustomDropdown(aliens, targetSelect) {
     // 1. Cria o container principal
     var dropdown = document.createElement("div");
     dropdown.style.position = "absolute";
-    dropdown.style.left = (interactivecanvas.offsetLeft + 250) + "px";
-    dropdown.style.top = (interactivecanvas.offsetTop + 80) + "px";
+    dropdown.style.left = (interactivecanvas.offsetLeft + 230) + "px";
+    dropdown.style.top = (interactivecanvas.offsetTop + 45) + "px";
     dropdown.style.zIndex = "100";
-    dropdown.style.width = "200px";
+    dropdown.style.width = "160px";
     dropdown.style.fontFamily = "HouseSampler";
     dropdown.style.fontSize = "18px";
     dropdown.style.background = "#000";

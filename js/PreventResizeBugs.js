@@ -5,8 +5,8 @@
             alientext1.style.top = interactivecanvas.offsetTop + 428;
 
             if (customDropdown !== null) {
-            customDropdown.style.left = interactivecanvas.offsetLeft + 250 // Ajuste o valor para a posição X desejada
-            customDropdown.style.top = interactivecanvas.offsetTop + 80  // Ajuste o valor para a posição Y desejada
+            customDropdown.style.left = interactivecanvas.offsetLeft + 230 // Ajuste o valor para a posição X desejada
+            customDropdown.style.top = interactivecanvas.offsetTop + 45  // Ajuste o valor para a posição Y desejada
             }
             
             //Alien Text 2
