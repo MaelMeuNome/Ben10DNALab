@@ -436,6 +436,27 @@ textContainer.style.color = "lime";
 textContainer.style.cursor = "default";
 document.body.appendChild(textContainer);
 
+// Bloqueia o menu de contexto (botão direito) na página inteira
+document.addEventListener('contextmenu', function(event) {
+    event.preventDefault();
+}, false);
+
+// Bloqueia o comportamento de "Arrastar e Soltar" de textos entre elementos
+document.addEventListener('dragover', function(event) {
+    // Impede o navegador de permitir o "soltar" (drop)
+    event.preventDefault();
+}, false);
+
+document.addEventListener('drop', function(event) {
+    // Impede o processamento da ação de soltar
+    event.preventDefault();
+}, false);
+
+// Opcional: Bloqueia também a colagem (Ctrl+V) se você quiser que o usuário 
+// seja obrigado a digitar apenas, sem colar códigos externos
+newInput1.addEventListener('paste', function(e) { e.preventDefault(); });
+newInput2.addEventListener('paste', function(e) { e.preventDefault(); });
+
 var aliens = [
     {name: "Wildvine", code: "rame"}, {name: "Ghostfreak", code: "rsam"},
     {name: "Four Arms", code: "nori"}, {name: "Diamondhead", code: "taki"},
