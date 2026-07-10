@@ -43,25 +43,6 @@ body {
     cursor: pointer;
 }
 
-/* Ajuste fino para mobile */
-@media (max-width: 768px) {
-    #alien-dropdown {
-        width: 150px;
-        font-size: 14px;
-        top: 10px !important; /* Move para o topo no mobile */
-        left: 10px !important;
-    }
-}
-
-/* Bloqueia o zoom automático em inputs e selects */
-input, select {
-    font-size: 16px !important;
-}
-
-/* Garante que o container também não sofra zoom */
-html, body {
-    touch-action: manipulation; /* Melhora a resposta ao toque */
-}
 
 *::selection {
     background: none;
