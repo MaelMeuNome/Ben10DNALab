@@ -294,12 +294,36 @@
         var omnitrixtopX = 284; //262
         var omnitrixtopY = 366; //360
         omnitrixtop.style.position = "absolute";
-        omnitrixtop.style.width = 342; //384
-        omnitrixtop.style.height = 135; //156
-        omnitrixtop.style.left = interactivecanvas.offsetLeft + omnitrixtopX;
-        omnitrixtop.style.top = interactivecanvas.offsetTop + omnitrixtopY;
+        omnitrixtop.style.width = "342px"; 
+        omnitrixtop.style.height = "135px"; 
+        omnitrixtop.style.left = (interactivecanvas.offsetLeft + omnitrixtopX) + "px";
+        omnitrixtop.style.top = (interactivecanvas.offsetTop + omnitrixtopY) + "px";
         omnitrixtop.style.zIndex = "2";
         omnitrixtop.src = "images/omnitrix/animation/0.png";
+
+        // OTIMIZAÇÃO: Cria uma lista na memória com as imagens já carregadas
+        var omnitrixPreloaded = [];
+        for (var i = 0; i <= 9; i++) {
+            var tempImg = new Image();
+            tempImg.src = "images/omnitrix/animation/" + i + ".png";
+            omnitrixPreloaded.push(tempImg);
+        }
+
+        // OTIMIZAÇÃO EXTRA: Pré-carregar as 21 imagens do ícone de som
+        var soundPreloaded = [];
+        for (var j = 1; j <= 21; j++) {
+            var tempSoundImg = new Image();
+            tempSoundImg.src = "images/bg/bganimatedelements/musicimages/" + j + ".png";
+            soundPreloaded.push(tempSoundImg);
+        }
+
+        // OTIMIZAÇÃO EXTRA: Pré-carregar as imagens do carregador lateral do omnitrix
+        var chargerPreloaded = [];
+        for (var k = 0; k <= 15; k++) {
+            var tempChargerImg = new Image();
+            tempChargerImg.src = "images/omnitrix/animation1/" + k + ".png";
+            chargerPreloaded.push(tempChargerImg);
+        }
 
         //OMNITRIX CHARGER NULL
         omnitrixchargernull.style.position = "absolute";
@@ -451,7 +475,8 @@
                                 if (framecounter == 22) {
                                     framecounter = 1;
                                 }
-                                soundimg1.src = "images/bg/bganimatedelements/musicimages/" + framecounter + ".png";
+                                // OTIMIZAÇÃO: Puxa o ícone de som direto da memória RAM
+                                soundimg1.src = soundPreloaded[framecounter - 1].src;
                             }, 60);
                         }
 
@@ -776,7 +801,7 @@
                                         if (chegou == false) {
                                             counter++
                                             omnitrixtopY = 366 - 7.75 * counter;
-                                            omnitrixtop.style.top = omnitrixtopY;
+                                            omnitrixtop.style.top = (interactivecanvas.offsetTop + omnitrixtopY) + "px";
                                         }
                                     }
                                 }
@@ -790,14 +815,15 @@
                                 if (counter >= 1) {
                                     counter--;
                                     omnitrixtopY = 366 - 7.75 * counter;
-                                    omnitrixtop.style.top = omnitrixtopY;
+                                    omnitrixtop.style.top = (interactivecanvas.offsetTop + omnitrixtopY) + "px";
                                 } else {
                                     inputcontext.clearRect(0, 0, 770, 650);
                                     retornou = true;
                                     clearInterval(animaromnitrix);
                                 }
                             }
-                            omnitrixtop.src = "images/omnitrix/animation/" + counter + ".png";
+                            // OTIMIZAÇÃO: Puxa o link direto da imagem salva na memória RAM
+                            omnitrixtop.src = omnitrixPreloaded[counter].src;
                             if (counter > 0 ? sinalizer.src = "images/omnitrix/omnitrixsinalizeractive.png" : sinalizer.src = "images/omnitrix/omnitrixsinalizerinactive.png");
                         }, 50);
 
@@ -810,7 +836,8 @@
                                 clearInterval(saidalateralverde);
                             }
 
-                            omnitrixchargerfull.src = "images/omnitrix/animation1/" + ocounter + ".png";
+                            // OTIMIZAÇÃO: Puxa a animação lateral da memória RAM
+                            omnitrixchargerfull.src = chargerPreloaded[ocounter].src;
                         }, 40);
 
                         var allrenders = setInterval(function() {
@@ -845,34 +872,27 @@
                                         document.body.appendChild(or);
                                         document.body.appendChild(startover);
                                         clearInterval(allrenders);
+
+                                        // CORREÇÃO 1: Ativa a sequência apenas quando eles estão de fato no HTML
+                                        animateSequentially();
                                     }
                                 }
                             }
                         }, 8);
 
-                        // Função para animar e mudar o tamanho de um elemento
+                        // OTIMIZAÇÃO DEFINITIVA: Mantém a sequência perfeita original e roda liso na GPU
+// CORREÇÃO 2: Garante o reflow correto e impede que a fila trave
                         function animateAndResize(element, duration, size) {
                             return new Promise((resolve) => {
-                                // Limpar animações anteriores (se houverem)
                                 element.style.animation = "none";
+                                void element.offsetHeight; // Agora funciona perfeitamente pois o elemento já está no DOM
 
-                                // Forçar um reflow para garantir que o estilo seja atualizado
-                                void element.offsetHeight;
-
-                                // Defina a animação e ajuste o tamanho
                                 element.style.animation = `grow ${duration}s ease-in-out`;
-                                element.style.height = size.height;
                                 element.style.width = size.width;
+                                element.style.height = size.height;
 
-                                // Escutar o evento de fim da animação
-                                element.addEventListener(
-                                    "animationend",
-                                    function onAnimationEnd() {
-                                        element.removeEventListener("animationend", onAnimationEnd); // Remover o listener
-                                        resolve(); // Continua para a próxima animação
-                                    },
-                                    { once: true } // Garante que o listener seja chamado apenas uma vez
-                                );
+                                // Usar o temporizador baseado no tempo da animação é 100% seguro contra travamentos
+                                setTimeout(resolve, duration * 1000);
                             });
                         }
 
@@ -888,7 +908,7 @@
                         }
 
                         // Inicia a animação sequencial
-                        animateSequentially();
+                        //animateSequentially();
                     }
                     entrada();
                 }
@@ -968,7 +988,7 @@
                                     if (chegou == false) {
                                         counter++
                                         omnitrixtopY = 366 - 7.75 * counter;
-                                        omnitrixtop.style.top = omnitrixtopY;
+                                        omnitrixtop.style.top = (interactivecanvas.offsetTop + omnitrixtopY) + "px";
                                     }
                                 }
                             }
@@ -982,14 +1002,15 @@
                             if (counter >= 1) {
                                 counter--;
                                 omnitrixtopY = 366 - 7.75 * counter;
-                                omnitrixtop.style.top = omnitrixtopY;
+                                omnitrixtop.style.top = (interactivecanvas.offsetTop + omnitrixtopY) + "px";
                             } else {
                                 inputcontext.clearRect(0, 0, 770, 650);
                                 clearInterval(animaromnitrix);
                                 retornou = true;
                             }
                         }
-                        omnitrixtop.src = "images/omnitrix/animation/" + counter + ".png";
+                        // OTIMIZAÇÃO: Puxa o link direto da imagem salva na memória RAM
+                        omnitrixtop.src = omnitrixPreloaded[counter].src;
                         if (counter > 0 ? sinalizer.src = "images/omnitrix/omnitrixsinalizeractive.png" : sinalizer.src = "images/omnitrix/omnitrixsinalizerinactive.png");
                     }, 50);
 
@@ -1051,7 +1072,8 @@
                             clearInterval(saidalateralverde);
                         }
 
-                        omnitrixchargerfull.src = "images/omnitrix/animation1/" + ocounter + ".png";
+                        // OTIMIZAÇÃO: Puxa a animação lateral da memória RAM
+                        omnitrixchargerfull.src = chargerPreloaded[ocounter].src;
                     }, 40);
                 }
 
@@ -1128,10 +1150,18 @@
 
                     saida();
 
-                    //Reset values
-                    downloadandprint.style.height = 0;
-                    or.style.height = 0;
-                    startover.style.height = 0;
+                    // CORREÇÃO 3: Reseta totalmente largura, altura e as animações antigas dos elementos
+                    downloadandprint.style.width = "0px";
+                    downloadandprint.style.height = "0px";
+                    downloadandprint.style.animation = "none";
+
+                    or.style.width = "0px";
+                    or.style.height = "0px";
+                    or.style.animation = "none";
+
+                    startover.style.width = "0px";
+                    startover.style.height = "0px";
+                    startover.style.animation = "none";
 
                     //Submit Button 2 Animation
                     canIAnimeIt = false;
