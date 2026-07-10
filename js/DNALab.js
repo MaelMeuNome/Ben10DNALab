@@ -1,3 +1,11 @@
+        // Impede o arrasto de qualquer elemento <img> ou <canvas>
+        document.addEventListener('dragstart', function(event) {
+            if (event.target.tagName === 'IMG' || event.target.tagName === 'CANVAS') {
+                event.preventDefault();
+                return false;
+            }
+        }, false);
+                
         //Loading Screen
         var loading = document.createElement("img");
         loading.style.position = "absolute";
@@ -160,6 +168,8 @@
         newInput1.style.textTransform = "lowercase";
         newInput1.style.zIndex = "6";
         newInput1.spellcheck = false;
+        newInput1.type = "text";
+        newInput1.maxLength = 4;
 
         //Input 2
         var newInput2 = document.createElement("input");
@@ -181,6 +191,26 @@
         newInput2.style.textTransform = "lowercase";
         newInput2.style.zIndex = "0";
         newInput2.spellcheck = false;
+        newInput2.type = "text";
+        newInput2.maxLength = 4;
+
+        // Função para garantir que apenas letras sejam aceitas
+        function aplicarFiltroDeLetras(inputElement) {
+            inputElement.addEventListener('input', function() {
+                // [^a-zA-Z] significa: qualquer coisa que NÃO seja letra (a-z ou A-Z)
+                // O .replace troca tudo o que não for letra por uma string vazia ""
+                this.value = this.value.replace(/[^a-zA-Z]/g, '');
+                
+                // Mantém o limite de 4 caracteres que conversamos antes
+                if (this.value.length > 4) {
+                    this.value = this.value.slice(0, 4);
+                }
+            });
+        }
+
+        // Aplique nos seus inputs
+        aplicarFiltroDeLetras(newInput1);
+        aplicarFiltroDeLetras(newInput2);
 
         //Input Box 1
         inputbox1.style.position = "absolute";
@@ -394,16 +424,46 @@
         audio.loop = true;
         audio.volume = 0.8;
 
-        //Codes Info
-        var text = document.createElement("p");
-        text.style.position = "absolute";
-        text.style.left = interactivecanvas.offsetLeft - 240;
-        text.style.top = interactivecanvas.offsetTop + 60;
-        text.style.fontFamily = "HouseSampler";
-        text.style.fontSize = "25";
-        text.innerText = "Alien Codes:\n\n Wildvine: rame\n Ghostfreak: rsam\n Four Arms: nori\n Diamondhead: taki\n Perk Upchuck: bafa\n Upgrade: funa\n Stinkfly: aval\n Heatblast: kenm\n Wildmutt: bric\n Blitzwolfer: ypet\n XLR8: wjas\n Snare-oh: ansn\n Frankenstrike: pkmn\n Cannonbolt: swor\n Gwen: mura\n Vilgax: akec\n GreyMatter: gujh";
-        text.style.zIndex = "1";
-        text.style.color = "lime";
+// Substitua o seu bloco de criação do texto por este:
+var textContainer = document.createElement("div");
+textContainer.style.position = "absolute";
+textContainer.style.left = (interactivecanvas.offsetLeft - 240) + "px";
+textContainer.style.top = (interactivecanvas.offsetTop + 60) + "px";
+textContainer.style.fontFamily = "HouseSampler";
+textContainer.style.fontSize = "25px";
+textContainer.style.zIndex = "1";
+textContainer.style.color = "lime";
+textContainer.style.cursor = "default";
+document.body.appendChild(textContainer);
+
+var aliens = [
+    {name: "Wildvine", code: "rame"}, {name: "Ghostfreak", code: "rsam"},
+    {name: "Four Arms", code: "nori"}, {name: "Diamondhead", code: "taki"},
+    {name: "Perk Upchuck", code: "bafa"}, {name: "Upgrade", code: "funa"},
+    {name: "Stinkfly", code: "aval"}, {name: "Heatblast", code: "kenm"},
+    {name: "Wildmutt", code: "bric"}, {name: "Blitzwolfer", code: "ypet"},
+    {name: "XLR8", code: "wjas"}, {name: "Snare-oh", code: "ansn"},
+    {name: "Frankenstrike", code: "pkmn"}, {name: "Cannonbolt", code: "swor"},
+    {name: "Gwen", code: "mura"}, {name: "Vilgax", code: "akec"},
+    {name: "GreyMatter", code: "gujh"}
+];
+
+aliens.forEach(function(alien) {
+    var line = document.createElement("div");
+    line.innerText = alien.name + ": " + alien.code;
+    line.style.cursor = "pointer"; // O mouse vira uma mãozinha
+    line.style.marginBottom = "5px";
+    
+    // A mágica acontece aqui:
+    line.onclick = function() {
+        // Determina qual input está ativo (o que tem z-index maior que 0)
+        var targetInput = (parseInt(newInput1.style.zIndex) > 0) ? newInput1 : newInput2;
+        targetInput.value = alien.code;
+        targetInput.focus();
+    };
+    
+    textContainer.appendChild(line);
+});
 
         //Submit Button Animations
         var bc = 1;
@@ -450,7 +510,6 @@
             document.body.appendChild(omnitrixchargerfull);
             document.body.appendChild(soundimg1);
             document.body.appendChild(sinalizer);
-            document.body.appendChild(text);
 
             //Draw Pre Fusion Image "?"
             fusioncontext.drawImage(assets.get("pretransition-i"), 0, 90, 770, 333);
