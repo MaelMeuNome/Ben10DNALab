@@ -436,6 +436,29 @@ textContainer.style.color = "lime";
 textContainer.style.cursor = "default";
 document.body.appendChild(textContainer);
 
+function fixarCursorNoFinal(inputElement) {
+    inputElement.addEventListener('click', function() {
+        // Quando clicar, move o cursor para o final do texto
+        this.selectionStart = this.selectionEnd = this.value.length;
+    });
+
+    inputElement.addEventListener('keyup', function() {
+        // Quando digitar, garante que ele continua no final
+        this.selectionStart = this.selectionEnd = this.value.length;
+    });
+    
+    // Bloqueia o "Arrow Keys" (setas do teclado) que movem o cursor
+    inputElement.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            e.preventDefault();
+        }
+    });
+}
+
+// Aplique aos seus inputs
+fixarCursorNoFinal(newInput1);
+fixarCursorNoFinal(newInput2);
+
 // Bloqueia o menu de contexto (botão direito) na página inteira
 document.addEventListener('contextmenu', function(event) {
     event.preventDefault();
