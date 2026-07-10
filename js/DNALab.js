@@ -212,6 +212,21 @@
         aplicarFiltroDeLetras(newInput1);
         aplicarFiltroDeLetras(newInput2);
 
+// Verifica se é Android ou iOS
+var isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+// Função para aplicar o estado do input
+function configureInput(inputElement) {
+    if (isMobile) {
+        inputElement.readOnly = true; // Impede que o teclado suba e o zoom ocorra
+        inputElement.style.cursor = "pointer"; // Indica que é clicável, mas não editável
+    }
+}
+
+// Aplique nos seus inputs assim que criá-los:
+configureInput(newInput1);
+configureInput(newInput2);
+
         //Input Box 1
         inputbox1.style.position = "absolute";
         inputbox1.style.left = interactivecanvas.offsetLeft + 258;
