@@ -5,6 +5,17 @@
                 return false;
             }
         }, false);
+
+        // Adiciona o @font-face via JS para garantir que o navegador saiba onde buscar
+        var style = document.createElement('style');
+        style.innerHTML = `
+            @font-face {
+                font-family: 'HouseSampler';
+                src: url('images/fonts/HouseSampler.otf') format('otf'); 
+                font-display: swap;
+            }
+        `;
+        document.head.appendChild(style);
                 
         //Loading Screen
         var loading = document.createElement("img");
