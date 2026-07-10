@@ -1460,20 +1460,26 @@ var aliens = [
                 }
 
 function createCustomDropdown(aliens, targetSelect) {
-    // 1. Cria o container principal
-    var dropdown = document.createElement("div");
-    dropdown.style.position = "absolute";
-    dropdown.style.left = (interactivecanvas.offsetLeft + 230) + "px";
-    dropdown.style.top = (interactivecanvas.offsetTop + 45) + "px";
-    dropdown.style.zIndex = "100";
-    dropdown.style.width = "160px";
-    dropdown.style.fontFamily = "HouseSampler";
-    dropdown.style.fontSize = "18px";
-    dropdown.style.background = "#000";
-    dropdown.style.border = "2px solid lime";
-    dropdown.style.color = "lime";
-    dropdown.style.cursor = "pointer";
-    dropdown.innerHTML = '<div style="padding: 10px;">SELECT TARGET</div>';
+// 1. Cria o container principal
+var dropdown = document.createElement("div");
+dropdown.style.position = "absolute";
+dropdown.style.left = (interactivecanvas.offsetLeft + 230) + "px";
+dropdown.style.top = (interactivecanvas.offsetTop + 45) + "px";
+dropdown.style.zIndex = "100";
+dropdown.style.width = "160px";
+dropdown.style.fontFamily = "HouseSampler";
+dropdown.style.fontSize = "18px";
+dropdown.style.background = "#000";
+dropdown.style.border = "2px solid lime";
+dropdown.style.color = "lime";
+dropdown.style.cursor = "pointer";
+
+// Cria o elemento do título com o estilo centralizado
+var header = document.createElement("div");
+header.innerHTML = "SELECT TARGET";
+header.style.padding = "10px";
+header.style.textAlign = "center"; // Simples e resolve para texto
+dropdown.appendChild(header);
 
     // 2. Cria a lista de opções (o "menu")
     var list = document.createElement("div");
