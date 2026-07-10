@@ -18,6 +18,41 @@ body {
     -webkit-user-select: none; /* Safari */
 }
 
+#alien-dropdown {
+    /* Força a aplicação da fonte */
+    font-family: 'HouseSampler', sans-serif !important;
+    
+    /* Garante que o texto das opções também receba a fonte */
+    color: lime;
+    background-color: #000;
+}
+
+#alien-dropdown option {
+    font-family: 'HouseSampler', sans-serif !important;
+    background-color: #000;
+    color: lime;
+}
+
+#alien-dropdown {
+    width: 200px;
+    padding: 10px;
+    background: #000;
+    color: lime;
+    border: 2px solid lime;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Ajuste fino para mobile */
+@media (max-width: 768px) {
+    #alien-dropdown {
+        width: 150px;
+        font-size: 14px;
+        top: 10px !important; /* Move para o topo no mobile */
+        left: 10px !important;
+    }
+}
+
 *::selection {
     background: none;
 }
