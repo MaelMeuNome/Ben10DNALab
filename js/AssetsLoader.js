@@ -1,9 +1,11 @@
 //Asset Loader
-
 var assets = new Map();
 var progress = 0;
+// Lista para sabermos o total de assets que mandamos carregar dinamicamente
+var totalAssets = 0; 
 
 function loadImageAsset(name, uri, callback) {
+    totalAssets++; // Cada imagem chamada aumenta o total necessário
     const image = new Image();
     image.src = uri;
     image.onload = function() {
@@ -17,21 +19,16 @@ function runProgress() {
     progress += 1;
 
     function canIRunNow() {
-
-        if (progress < 70) { //438
+        // Agora ele calcula a barra de loading com base no total real de imagens
+        if (progress < totalAssets) { 
             loading.src = "images/loading/0.png";
-            //loading.src = "images/loading/" + parseInt(progress / 100) + ".png";
         }
-        /*
-        var passarinho = setInterval(function() {
-        }, 100);
-        */
 
-        if (progress == 70) {
+        // Quando o progresso atual for igual ao total de assets disparados, o jogo roda!
+        if (progress == totalAssets) {
             loading.remove();
             draw();
         }
-
     }
     canIRunNow();
 }
@@ -106,3 +103,20 @@ loadImageAsset("sinalizerinactive", "images/omnitrix/omnitrixsinalizerinactive.p
 loadImageAsset("sinalizeractive", "images/omnitrix/omnitrixsinalizeractive.png", runProgress);
 loadImageAsset("pretransition-a", "images/fusions/mainactive.png", runProgress);
 loadImageAsset("pretransition-i", "images/fusions/maininactive.png", runProgress);
+loadImageAsset("rame", "images/bg/DNALab/inputs/aliens/rame.png", runProgress);
+loadImageAsset("rsam", "images/bg/DNALab/inputs/aliens/rsam.png", runProgress);
+loadImageAsset("nori", "images/bg/DNALab/inputs/aliens/nori.png", runProgress);
+loadImageAsset("taki", "images/bg/DNALab/inputs/aliens/taki.png", runProgress);
+loadImageAsset("bafa", "images/bg/DNALab/inputs/aliens/bafa.png", runProgress);
+loadImageAsset("funa", "images/bg/DNALab/inputs/aliens/funa.png", runProgress);
+loadImageAsset("aval", "images/bg/DNALab/inputs/aliens/aval.png", runProgress);
+loadImageAsset("kenm", "images/bg/DNALab/inputs/aliens/kenm.png", runProgress);
+loadImageAsset("bric", "images/bg/DNALab/inputs/aliens/bric.png", runProgress);
+loadImageAsset("ypet", "images/bg/DNALab/inputs/aliens/ypet.png", runProgress);
+loadImageAsset("wjas", "images/bg/DNALab/inputs/aliens/wjas.png", runProgress);
+loadImageAsset("ansn", "images/bg/DNALab/inputs/aliens/ansn.png", runProgress);
+loadImageAsset("pkmn", "images/bg/DNALab/inputs/aliens/pkmn.png", runProgress);
+loadImageAsset("swor", "images/bg/DNALab/inputs/aliens/swor.png", runProgress);
+loadImageAsset("mura", "images/bg/DNALab/inputs/aliens/mura.png", runProgress);
+loadImageAsset("akec", "images/bg/DNALab/inputs/aliens/akec.png", runProgress);
+loadImageAsset("gujh", "images/bg/DNALab/inputs/aliens/gujh.png", runProgress);
