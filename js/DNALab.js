@@ -459,6 +459,17 @@ function fixarCursorNoFinal(inputElement) {
 fixarCursorNoFinal(newInput1);
 fixarCursorNoFinal(newInput2);
 
+function bloquearSelecaoNoInput(inputElement) {
+    // 2. Impede o clique duplo (que seleciona o texto)
+    inputElement.addEventListener('dblclick', function(e) {
+        e.preventDefault();
+    });
+}
+
+// Aplique aos seus inputs
+bloquearSelecaoNoInput(newInput1);
+bloquearSelecaoNoInput(newInput2);
+
 // Bloqueia o menu de contexto (botão direito) na página inteira
 document.addEventListener('contextmenu', function(event) {
     event.preventDefault();
