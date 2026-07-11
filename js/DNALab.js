@@ -1552,9 +1552,7 @@ dropdown.appendChild(header);
         // O menu NÃO ABRE se:
         // 1. A animação de entrada ou saída estiver rodando
         // 2. O botão de startover estiver ativo na tela esperando o reset
-        if ((typeof isEntradaRunning !== "undefined" && isEntradaRunning) || 
-            (typeof isSaidaRunning !== "undefined" && isSaidaRunning) || 
-            isStartOverVisible) {
+        if ((typeof isEntradaRunning !== "undefined" && isEntradaRunning) || isStartOverVisible) {
             
             console.log("Omnitrix ocupado ou aguardando reset. Menu bloqueado.");
             return; 
