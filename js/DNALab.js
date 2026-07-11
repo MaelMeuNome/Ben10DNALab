@@ -385,7 +385,7 @@
         
         // OTIMIZAÇÃO: Cria uma lista na memória com as imagens já carregadas
         var omnitrixPreloaded = [];
-        for (var i = 0; i <= 9; i++) {
+        for (var i = 0; i <= 8; i++) {
             var tempImg = new Image();
             tempImg.src = "images/omnitrix/animation/" + i + ".png";
             omnitrixPreloaded.push(tempImg);
