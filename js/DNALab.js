@@ -1541,12 +1541,19 @@ dropdown.appendChild(header);
         
         list.appendChild(item);
     });
-
-// 4. Lógica de abertura/fechamento com trava do Omnitrix
+    
+// 4. Lógica de abertura/fechamento com bloqueio total de segurança
     dropdown.onclick = function() {
-        // Se a animação de ENTRADA ou SAÍDA estiver rodando, o clique morre aqui e o menu não abre/fecha
-        if ((typeof isEntradaRunning !== "undefined" && isEntradaRunning) || (typeof isSaidaRunning !== "undefined" && isSaidaRunning)) {
-            console.log("Omnitrix ocupado. Menu bloqueado.");
+        var isStartOverVisible = parseInt(startover.style.width) > 0;
+
+        // O menu NÃO ABRE se:
+        // 1. A animação de entrada ou saída estiver rodando
+        // 2. O botão de startover estiver ativo na tela esperando o reset
+        if ((typeof isEntradaRunning !== "undefined" && isEntradaRunning) || 
+            (typeof isSaidaRunning !== "undefined" && isSaidaRunning) || 
+            isStartOverVisible) {
+            
+            console.log("Omnitrix ocupado ou aguardando reset. Menu bloqueado.");
             return; 
         }
 
