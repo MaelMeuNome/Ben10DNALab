@@ -205,6 +205,10 @@
         newInput2.type = "text";
         newInput2.maxLength = 4;
 
+        var isEntradaRunning = false;
+        var isSaidaRunning = false;
+        var rodadaCompleta = false;
+
         var customDropdown = null;
 
         document.addEventListener("click", function(event) {
@@ -749,6 +753,7 @@ var aliens = [
                         submitbutton1.style.cursor = "default";
                     }
                     submit2();
+                    rodadaCompleta = true;
                 }
 
                 function submit2() {
@@ -837,6 +842,7 @@ var aliens = [
                 function animarissotudo() {
 
                     function entrada() {
+                        isEntradaRunning = true;
                         //Variaveis das animações
 
                         //Transição de entrada "?"
@@ -1024,6 +1030,7 @@ var aliens = [
 
                                         // CORREÇÃO 1: Ativa a sequência apenas quando eles estão de fato no HTML
                                         animateSequentially();
+                                        isEntradaRunning = false;
                                     }
                                 }
                             }
@@ -1063,6 +1070,8 @@ var aliens = [
                 }
 
                 function saida() {
+
+                    isSaidaRunning = true; // Começou!
                     //Variaveis das animações
 
                     //Demais coisas
@@ -1212,6 +1221,7 @@ var aliens = [
                         }
                     }, 15);
 
+                    // Altere apenas essa parte final do seu setInterval 'saidalateralverde'
                     var saidalateralverde = setInterval(function() {
                         if (retornou == true) {
                             ocounter++;
@@ -1219,9 +1229,9 @@ var aliens = [
 
                         if (ocounter == 15) {
                             clearInterval(saidalateralverde);
+                            isSaidaRunning = false; // Terminou!
                         }
 
-                        // OTIMIZAÇÃO: Puxa a animação lateral da memória RAM
                         omnitrixchargerfull.src = chargerPreloaded[ocounter].src;
                     }, 40);
                 }
@@ -1544,47 +1554,86 @@ dropdown.appendChild(header);
     return dropdown;
 }
 
-// Esta é a função que você chamará no 'onclick' de cada item do seu Dropdown Customizado
 function processAlienSelection(alienCode) {
     if (alienCode === "SELECT TARGET") return;
 
-    // 1. Armazena o alien no buffer (o pendingAlien global que já existia)
     pendingAlien = alienCode;
 
-    // 2. Lógica de Erro / Limpeza
+    // 1. Se a animação de ENTRADA está rodando, espera!
+    if (typeof isEntradaRunning !== "undefined" && isEntradaRunning) {
+        var checkEntrada = setInterval(function() {
+            if (!isEntradaRunning) {
+                clearInterval(checkEntrada);
+                processAlienSelection(alienCode); 
+            }
+        }, 50);
+        return;
+    }
+
+    // 2. Mapeamento dos estados dos botões
+    var isInput1Active = parseInt(newInput1.style.zIndex) > 0;
+    var isInput2Active = parseInt(newInput2.style.zIndex) > 0;
+    var isStartOverVisible = parseInt(startover.style.width) > 0;
+    var isBackButtonVisible = parseInt(backbutton.style.zIndex) > 0;
+    var isBackButton2Visible = parseInt(backbutton2.style.zIndex) > 0;
+
+    // Verifica se estamos esperando o segundo alien
+    var esperandoSegundoAlien = isInput2Active && newInput1.value.trim() !== "" && newInput2.value.trim() === "";
+    
+    // NOVO: Verifica se o jogo está em tela de erro (com algum botão de voltar visível)
+    var temBotaoVoltar = isBackButtonVisible || isBackButton2Visible;
+
+    // Só força a espera do startover se não for o segundo alien, NÃO tiver botão de voltar na tela,
+    // e o startover ainda não apareceu (clique rápido pós-fusão bem-sucedida)
+    if (!esperandoSegundoAlien && !temBotaoVoltar && !isInput1Active && !isInput2Active && !isStartOverVisible) {
+        var waitForStartOver = setInterval(function() {
+            if (parseInt(startover.style.width) > 0) {
+                clearInterval(waitForStartOver);
+                processAlienSelection(alienCode); 
+            }
+        }, 30); 
+        return;
+    }
+
+    // 3. Lógica de Reset (Agora o erro de código incompatível cai direto aqui!)
     var needsReset = false;
     
-    if (parseInt(startover.style.width) > 0) {
-        startover.click();
+    if (!esperandoSegundoAlien && isStartOverVisible) {
+        startover.click(); 
         needsReset = true;
-    } else if (parseInt(backbutton.style.zIndex) > 0) {
-        backbutton.click();
+    } else if (!esperandoSegundoAlien && isBackButtonVisible) {
+        backbutton.click(); // <--- Clica no primeiro botão de voltar
         needsReset = true;
-    } else if (parseInt(backbutton2.style.zIndex) > 0) {
-        backbutton2.click();
+    } else if (!esperandoSegundoAlien && isBackButton2Visible) {
+        backbutton2.click(); // <--- Clica no segundo botão de voltar
         needsReset = true;
     }
 
-    // 3. Se houve reset, espera o sistema estabilizar (o setTimeOut continua firme)
+    // 4. Se houve reset (seja por startover ou por erro/backbutton), monitora a 'saida'
     if (needsReset) {
-        setTimeout(function() {
-            var activeInput = (parseInt(newInput1.style.zIndex) > 0) ? newInput1 : newInput2;
-            if (activeInput) {
-                activeInput.value = pendingAlien;
-                if (activeInput === newInput1) {
-                    submit1();
-                } else {
-                    submitbutton1.style.cursor = "default";
-                    submit2();
+        var checkSaida = setInterval(function() {
+            if (!isSaidaRunning) {
+                clearInterval(checkSaida);
+                
+                var activeInput = (parseInt(newInput1.style.zIndex) > 0) ? newInput1 : newInput2;
+                if (activeInput) {
+                    activeInput.value = pendingAlien;
+                    if (activeInput === newInput1) {
+                        submit1();
+                    } else {
+                        submitbutton1.style.cursor = "default";
+                        submit2();
+                    }
                 }
+                pendingAlien = null;
             }
-            pendingAlien = null; 
-        }, 300);
-        return; // Sai da função, pois o setTimeout vai terminar o serviço
+        }, 50);
+        
+        return;
     }
 
-    // 4. Fluxo normal (sem necessidade de reset)
-    var activeInput = (parseInt(newInput1.style.zIndex) > 0) ? newInput1 : newInput2;
+    // 5. Fluxo normal
+    var activeInput = isInput1Active ? newInput1 : (isInput2Active ? newInput2 : null);
     if (activeInput) {
         activeInput.value = alienCode;
         if (activeInput === newInput1) {
