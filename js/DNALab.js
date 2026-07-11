@@ -840,6 +840,7 @@ var aliens = [
 
                     function entrada() {
                         isEntradaRunning = true;
+                        customDropdown.style.zIndex = "0"; // Garante que o dropdown esteja acima de tudo
                         //Variaveis das animações
 
                         //Transição de entrada "?"
@@ -1070,6 +1071,8 @@ var aliens = [
                 function saida() {
 
                     isSaidaRunning = true; // Começou!
+                    customDropdown.style.zIndex = "100"; // Garante que o dropdown esteja acima de tudo
+
                     //Variaveis das animações
 
                     //Demais coisas
@@ -1214,7 +1217,7 @@ var aliens = [
 
                             if (mainrendercounter == 31) {
                                 desenhouasegundaparte = true;
-                                isSaidaRunning = false; // Terminou!
+                                isSaidaRunning = false; // Terminou!                                
                                 clearInterval(animeMainRender2);
                             }
                         }
