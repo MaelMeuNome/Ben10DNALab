@@ -13,7 +13,8 @@ var PrimusDB = {
         "ansn": "images/fusions/rame/snareoh",
         "pkmn": "images/fusions/rame/frankenstrike",
         "swor": "images/fusions/rame/cannonbolt",
-        "gujh": "images/fusions/rame/greymatter"
+        "gujh": "images/fusions/rame/greymatter",
+        "vaxr": "images/fusions/rame/ripjaws"
     },
 
     "rsam": {
@@ -30,7 +31,8 @@ var PrimusDB = {
         "ansn": "images/fusions/rsam/snareoh",
         "pkmn": "images/fusions/rsam/frankenstrike",
         "swor": "images/fusions/rsam/cannonbolt",
-		"gujh": "images/fusions/rsam/greymatter"
+		"gujh": "images/fusions/rsam/greymatter",
+        "vaxr": "images/fusions/rsam/ripjaws"
     },
 
     "nori": {
@@ -47,7 +49,8 @@ var PrimusDB = {
         "ansn": "images/fusions/nori/snareoh",
         "pkmn": "images/fusions/nori/frankenstrike",
         "swor": "images/fusions/nori/cannonbolt",
-		"gujh": "images/fusions/nori/greymatter"
+		"gujh": "images/fusions/nori/greymatter",
+        "vaxr": "images/fusions/nori/ripjaws"
     },
 
     "taki": {
@@ -65,6 +68,7 @@ var PrimusDB = {
         "pkmn": "images/fusions/taki/frankenstrike",
         "swor": "images/fusions/taki/cannonbolt",
         "gujh": "images/fusions/taki/greymatter",
+        "vaxr": "images/fusions/taki/ripjaws"
     },
 
     "bafa": {
@@ -81,7 +85,8 @@ var PrimusDB = {
         "ansn": "images/fusions/bafa/snareoh",
         "pkmn": "images/fusions/bafa/frankenstrike",
         "swor": "images/fusions/bafa/cannonbolt",
-        "gujh": "images/fusions/bafa/greymatter"
+        "gujh": "images/fusions/bafa/greymatter",
+        "vaxr": "images/fusions/bafa/ripjaws"
     },
 
     "funa": {
@@ -99,6 +104,7 @@ var PrimusDB = {
         "pkmn": "images/fusions/funa/frankenstrike",
         "swor": "images/fusions/funa/cannonbolt",
         "gujh": "images/fusions/funa/greymatter",
+        "vaxr": "images/fusions/funa/ripjaws"
     },
 
     "aval": {
@@ -115,7 +121,8 @@ var PrimusDB = {
         "ansn": "images/fusions/aval/snareoh",
         "pkmn": "images/fusions/aval/frankenstrike",
         "swor": "images/fusions/aval/cannonbolt",
-		"gujh": "images/fusions/aval/greymatter"
+		"gujh": "images/fusions/aval/greymatter",
+        "vaxr": "images/fusions/aval/ripjaws"
     },
 
     "kenm": {
@@ -132,7 +139,8 @@ var PrimusDB = {
         "ansn": "images/fusions/kenm/snareoh",
         "pkmn": "images/fusions/kenm/frankenstrike",
         "swor": "images/fusions/kenm/cannonbolt",
-		"gujh": "images/fusions/kenm/greymatter"
+		"gujh": "images/fusions/kenm/greymatter",
+        "vaxr": "images/fusions/kenm/ripjaws"
     },
 
     "bric": {
@@ -149,7 +157,8 @@ var PrimusDB = {
         "ansn": "images/fusions/bric/snareoh",
         "pkmn": "images/fusions/bric/frankenstrike",
         "swor": "images/fusions/bric/cannonbolt",
-		"gujh": "images/fusions/bric/greymatter"
+		"gujh": "images/fusions/bric/greymatter",
+        "vaxr": "images/fusions/bric/ripjaws"
     },
 
     "ypet": {
@@ -166,7 +175,8 @@ var PrimusDB = {
         "ansn": "images/fusions/ypet/snareoh",
         "pkmn": "images/fusions/ypet/frankenstrike",
         "swor": "images/fusions/ypet/cannonbolt",
-		"gujh": "images/fusions/ypet/greymatter"
+		"gujh": "images/fusions/ypet/greymatter",
+        "vaxr": "images/fusions/ypet/ripjaws"
     },
 
     "wjas": {
@@ -183,7 +193,8 @@ var PrimusDB = {
         "ansn": "images/fusions/wjas/snareoh",
         "pkmn": "images/fusions/wjas/frankenstrike",
         "swor": "images/fusions/wjas/cannonbolt",
-		"gujh": "images/fusions/wjas/greymatter"
+		"gujh": "images/fusions/wjas/greymatter",
+        "vaxr": "images/fusions/wjas/ripjaws"
     },
 
     "ansn": {
@@ -200,7 +211,8 @@ var PrimusDB = {
         "wjas": "images/fusions/ansn/xlr8",
         "pkmn": "images/fusions/ansn/frankenstrike",
         "swor": "images/fusions/ansn/cannonbolt",
-        "gujh": "images/fusions/ansn/greymatter"
+        "gujh": "images/fusions/ansn/greymatter",
+        "vaxr": "images/fusions/ansn/ripjaws"
     },
 
     "pkmn": {
@@ -217,7 +229,8 @@ var PrimusDB = {
         "wjas": "images/fusions/pkmn/xlr8",
         "ansn": "images/fusions/pkmn/snareoh",
         "swor": "images/fusions/pkmn/cannonbolt",
-        "gujh": "images/fusions/pkmn/greymatter"
+        "gujh": "images/fusions/pkmn/greymatter",
+        "vaxr": "images/fusions/pkmn/ripjaws"
     },
 
     "swor": {
@@ -234,7 +247,8 @@ var PrimusDB = {
         "wjas": "images/fusions/swor/xlr8",
         "ansn": "images/fusions/swor/snareoh",
         "pkmn": "images/fusions/swor/frankenstrike",
-        "gujh": "images/fusions/swor/greymatter"
+        "gujh": "images/fusions/swor/greymatter",
+        "vaxr": "images/fusions/swor/ripjaws"
     },
 
     "gujh": {
@@ -252,6 +266,25 @@ var PrimusDB = {
 		"nori": "images/fusions/gujh/fourarms",
 		"rsam": "images/fusions/gujh/ghostfreak",
 		"aval": "images/fusions/gujh/stinkfly",
+        "vaxr": "images/fusions/gujh/ripjaws",
+    },
+
+    "vaxr": {
+        "rame": "images/fusions/vaxr/wildvine",
+        "bafa": "images/fusions/vaxr/upchuck",
+        "ansn": "images/fusions/vaxr/snareoh",
+        "pkmn": "images/fusions/vaxr/frankenstrike",
+        "taki": "images/fusions/vaxr/diamondhead",
+        "swor": "images/fusions/vaxr/cannonbolt",
+        "funa": "images/fusions/vaxr/upgrade",
+		"wjas": "images/fusions/vaxr/xlr8",
+		"kenm": "images/fusions/vaxr/heatblast",
+		"bric": "images/fusions/vaxr/wildmutt",
+		"ypet": "images/fusions/vaxr/blitzwolfer",
+		"nori": "images/fusions/vaxr/fourarms",
+		"rsam": "images/fusions/vaxr/ghostfreak",
+		"aval": "images/fusions/vaxr/stinkfly",
+        "gujh": "images/fusions/vaxr/greymatter",
     },
 
     "mura": {

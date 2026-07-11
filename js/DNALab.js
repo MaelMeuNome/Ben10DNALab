@@ -552,6 +552,7 @@ var aliens = [
     { name: "GreyMatter", "code": "gujh" },
     { name: "Four Arms", "code": "nori" },
     { name: "Stinkfly", "code": "aval" },
+    { name: "Ripjaws", "code": "vaxr" },
     { name: "Upgrade", "code": "funa" },
     { name: "Ghostfreak", "code": "rsam" },
     { name: "Cannonbolt", "code": "swor" },
