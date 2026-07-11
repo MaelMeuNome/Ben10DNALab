@@ -1027,7 +1027,6 @@ var aliens = [
 
                                         // CORREÇÃO 1: Ativa a sequência apenas quando eles estão de fato no HTML
                                         animateSequentially();
-                                        isEntradaRunning = false;
                                     }
                                 }
                             }
@@ -1058,6 +1057,8 @@ var aliens = [
 
                             // Animação para 'startover'
                             await animateAndResize(startover, 0.2, { height: "12px", width: "75px" });
+
+                            isEntradaRunning = false;
                         }
 
                         // Inicia a animação sequencial
@@ -1213,6 +1214,7 @@ var aliens = [
 
                             if (mainrendercounter == 31) {
                                 desenhouasegundaparte = true;
+                                isSaidaRunning = false; // Terminou!
                                 clearInterval(animeMainRender2);
                             }
                         }
@@ -1226,7 +1228,6 @@ var aliens = [
 
                         if (ocounter == 15) {
                             clearInterval(saidalateralverde);
-                            isSaidaRunning = false; // Terminou!
                         }
 
                         omnitrixchargerfull.src = chargerPreloaded[ocounter].src;
@@ -1541,8 +1542,14 @@ dropdown.appendChild(header);
         list.appendChild(item);
     });
 
-    // 4. Lógica de abertura/fechamento
+// 4. Lógica de abertura/fechamento com trava do Omnitrix
     dropdown.onclick = function() {
+        // Se a animação de ENTRADA ou SAÍDA estiver rodando, o clique morre aqui e o menu não abre/fecha
+        if ((typeof isEntradaRunning !== "undefined" && isEntradaRunning) || (typeof isSaidaRunning !== "undefined" && isSaidaRunning)) {
+            console.log("Omnitrix ocupado. Menu bloqueado.");
+            return; 
+        }
+
         list.style.display = (list.style.display === "none") ? "block" : "none";
     };
 
@@ -1554,35 +1561,20 @@ dropdown.appendChild(header);
 function processAlienSelection(alienCode) {
     if (alienCode === "SELECT TARGET") return;
 
-    // 1. CHECAGEM DE DISPONIBILIDADE (O bloqueio que você pensou)
-    // Se a animação de ENTRADA ou SAÍDA estiver rodando, bloqueia na hora!
-    if ((typeof isEntradaRunning !== "undefined" && isEntradaRunning) || (typeof isSaidaRunning !== "undefined" && isSaidaRunning)) {
-        console.log("Omnitrix ocupado. Clique ignorado.");
-        return; 
-    }
-
-    // 2. Mapeamento dos botões e inputs
+    // 1. Mapeamento imediato dos botões e inputs
     var isInput1Active = parseInt(newInput1.style.zIndex) > 0;
     var isInput2Active = parseInt(newInput2.style.zIndex) > 0;
     var isStartOverVisible = parseInt(startover.style.width) > 0;
     var isBackButtonVisible = parseInt(backbutton.style.zIndex) > 0;
     var isBackButton2Visible = parseInt(backbutton2.style.zIndex) > 0;
 
-    // Verifica se estamos no meio da rodada esperando o segundo alien
+    // Verifica se estamos esperando o segundo alien (Slot 2 ativo e vazio)
     var esperandoSegundoAlien = isInput2Active && newInput1.value.trim() !== "" && newInput2.value.trim() === "";
-    var temBotaoVoltar = isBackButtonVisible || isBackButton2Visible;
-
-    // Se a fusão já aconteceu (inputs sumiram) mas o startover ainda não apareceu na tela,
-    // significa que o jogo ainda está processando. Bloqueia também!
-    if (!esperandoSegundoAlien && !temBotaoVoltar && !isInput1Active && !isInput2Active && !isStartOverVisible) {
-        console.log("Aguardando inicialização do painel. Clique ignorado.");
-        return;
-    }
 
     // Guardamos o alien atual no buffer simples
     pendingAlien = alienCode;
 
-    // 3. Lógica de Reset / Voltar (Execução imediata)
+    // 2. Lógica de Reset / Voltar (Execução imediata)
     var needsReset = false;
     
     if (!esperandoSegundoAlien && isStartOverVisible) {
@@ -1596,7 +1588,7 @@ function processAlienSelection(alienCode) {
         needsReset = true;
     }
 
-    // 4. Se precisou resetar, espera a 'saida' limpar a tela para injetar
+    // 3. Se precisou resetar (por startover ou erro), espera a 'saida' limpar a tela para injetar no input1
     if (needsReset) {
         var checkSaida = setInterval(function() {
             if (!isSaidaRunning) {
@@ -1619,7 +1611,7 @@ function processAlienSelection(alienCode) {
         return;
     }
 
-    // 5. Fluxo normal (Inserção direta quando o painel está livre)
+    // 4. Fluxo normal (Inserção direta quando o painel já está limpo e esperando o clique)
     var activeInput = isInput1Active ? newInput1 : (isInput2Active ? newInput2 : null);
     if (activeInput) {
         activeInput.value = alienCode;
