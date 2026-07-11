@@ -382,9 +382,6 @@
         omnitrixtop.style.top = (interactivecanvas.offsetTop + omnitrixtopY) + "px";
         omnitrixtop.style.zIndex = "2";
         omnitrixtop.src = "images/omnitrix/animation/0.png";
-
-        // Crie esta variável globalmente no seu script
-        var pendingAlien = null; 
         
         // OTIMIZAÇÃO: Cria uma lista na memória com as imagens já carregadas
         var omnitrixPreloaded = [];
@@ -1557,59 +1554,49 @@ dropdown.appendChild(header);
 function processAlienSelection(alienCode) {
     if (alienCode === "SELECT TARGET") return;
 
-    pendingAlien = alienCode;
-
-    // 1. Se a animação de ENTRADA está rodando, espera!
-    if (typeof isEntradaRunning !== "undefined" && isEntradaRunning) {
-        var checkEntrada = setInterval(function() {
-            if (!isEntradaRunning) {
-                clearInterval(checkEntrada);
-                processAlienSelection(alienCode); 
-            }
-        }, 50);
-        return;
+    // 1. CHECAGEM DE DISPONIBILIDADE (O bloqueio que você pensou)
+    // Se a animação de ENTRADA ou SAÍDA estiver rodando, bloqueia na hora!
+    if ((typeof isEntradaRunning !== "undefined" && isEntradaRunning) || (typeof isSaidaRunning !== "undefined" && isSaidaRunning)) {
+        console.log("Omnitrix ocupado. Clique ignorado.");
+        return; 
     }
 
-    // 2. Mapeamento dos estados dos botões
+    // 2. Mapeamento dos botões e inputs
     var isInput1Active = parseInt(newInput1.style.zIndex) > 0;
     var isInput2Active = parseInt(newInput2.style.zIndex) > 0;
     var isStartOverVisible = parseInt(startover.style.width) > 0;
     var isBackButtonVisible = parseInt(backbutton.style.zIndex) > 0;
     var isBackButton2Visible = parseInt(backbutton2.style.zIndex) > 0;
 
-    // Verifica se estamos esperando o segundo alien
+    // Verifica se estamos no meio da rodada esperando o segundo alien
     var esperandoSegundoAlien = isInput2Active && newInput1.value.trim() !== "" && newInput2.value.trim() === "";
-    
-    // NOVO: Verifica se o jogo está em tela de erro (com algum botão de voltar visível)
     var temBotaoVoltar = isBackButtonVisible || isBackButton2Visible;
 
-    // Só força a espera do startover se não for o segundo alien, NÃO tiver botão de voltar na tela,
-    // e o startover ainda não apareceu (clique rápido pós-fusão bem-sucedida)
+    // Se a fusão já aconteceu (inputs sumiram) mas o startover ainda não apareceu na tela,
+    // significa que o jogo ainda está processando. Bloqueia também!
     if (!esperandoSegundoAlien && !temBotaoVoltar && !isInput1Active && !isInput2Active && !isStartOverVisible) {
-        var waitForStartOver = setInterval(function() {
-            if (parseInt(startover.style.width) > 0) {
-                clearInterval(waitForStartOver);
-                processAlienSelection(alienCode); 
-            }
-        }, 30); 
+        console.log("Aguardando inicialização do painel. Clique ignorado.");
         return;
     }
 
-    // 3. Lógica de Reset (Agora o erro de código incompatível cai direto aqui!)
+    // Guardamos o alien atual no buffer simples
+    pendingAlien = alienCode;
+
+    // 3. Lógica de Reset / Voltar (Execução imediata)
     var needsReset = false;
     
     if (!esperandoSegundoAlien && isStartOverVisible) {
         startover.click(); 
         needsReset = true;
     } else if (!esperandoSegundoAlien && isBackButtonVisible) {
-        backbutton.click(); // <--- Clica no primeiro botão de voltar
+        backbutton.click();
         needsReset = true;
     } else if (!esperandoSegundoAlien && isBackButton2Visible) {
-        backbutton2.click(); // <--- Clica no segundo botão de voltar
+        backbutton2.click();
         needsReset = true;
     }
 
-    // 4. Se houve reset (seja por startover ou por erro/backbutton), monitora a 'saida'
+    // 4. Se precisou resetar, espera a 'saida' limpar a tela para injetar
     if (needsReset) {
         var checkSaida = setInterval(function() {
             if (!isSaidaRunning) {
@@ -1632,7 +1619,7 @@ function processAlienSelection(alienCode) {
         return;
     }
 
-    // 5. Fluxo normal
+    // 5. Fluxo normal (Inserção direta quando o painel está livre)
     var activeInput = isInput1Active ? newInput1 : (isInput2Active ? newInput2 : null);
     if (activeInput) {
         activeInput.value = alienCode;
