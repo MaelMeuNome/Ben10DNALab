@@ -545,15 +545,22 @@ newInput1.addEventListener('paste', function(e) { e.preventDefault(); });
 newInput2.addEventListener('paste', function(e) { e.preventDefault(); });
 
 var aliens = [
-    {name: "Wildvine", code: "rame"}, {name: "Ghostfreak", code: "rsam"},
-    {name: "Four Arms", code: "nori"}, {name: "Diamondhead", code: "taki"},
-    {name: "Perk Upchuck", code: "bafa"}, {name: "Upgrade", code: "funa"},
-    {name: "Stinkfly", code: "aval"}, {name: "Heatblast", code: "kenm"},
-    {name: "Wildmutt", code: "bric"}, {name: "Blitzwolfer", code: "ypet"},
-    {name: "XLR8", code: "wjas"}, {name: "Snare-oh", code: "ansn"},
-    {name: "Frankenstrike", code: "pkmn"}, {name: "Cannonbolt", code: "swor"},
-    {name: "Gwen", code: "mura"}, {name: "Vilgax", code: "akec"},
-    {name: "GreyMatter", code: "gujh"}
+    { name: "Heatblast", "code": "kenm" },
+    { name: "Wildmutt", "code": "bric" },
+    { name: "Diamondhead", "code": "taki" },
+    { name: "XLR8", "code": "wjas" },
+    { name: "GreyMatter", "code": "gujh" },
+    { name: "Four Arms", "code": "nori" },
+    { name: "Stinkfly", "code": "aval" },
+    { name: "Ghostfreak", "code": "rsam" },
+    { name: "Upgrade", "code": "funa" },
+    { name: "Wildvine", "code": "rame" },
+    { name: "Cannonbolt", "code": "swor" },
+    { name: "Perk Upchuck", "code": "bafa" },
+    { name: "Blitzwolfer", "code": "ypet" },
+    { name: "Snare-oh", "code": "ansn" },
+    { name: "Frankenstrike", "code": "pkmn" },
+    { name: "Gwen", code: "mura"}, {name: "Vilgax", code: "akec"},
 ];
 
         //Submit Button Animations
