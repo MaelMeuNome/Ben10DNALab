@@ -1482,6 +1482,18 @@ var aliens = [
                 }
 
 function createCustomDropdown(aliens, targetSelect) {
+var styleNode = document.createElement("style");
+    styleNode.innerHTML = `
+        .hidden-scroll {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+        .hidden-scroll::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera, Edge Novo */
+        }
+    `;
+    document.head.appendChild(styleNode);
+
 // 1. Cria o container principal
 var dropdown = document.createElement("div");
 dropdown.style.position = "absolute";
@@ -1509,6 +1521,7 @@ dropdown.appendChild(header);
     list.style.maxHeight = "200px"; // Isso limita o tamanho (aprox. 5 itens)
     list.style.overflowY = "auto";  // Ativa o scroll
     list.style.borderTop = "1px solid lime";
+    list.className = "hidden-scroll";
 
         // 3. Popula os aliens na lista
     aliens.forEach(function(alien) {
