@@ -33,5 +33,7 @@ var AlienDB = {
 
     "gujh": "images/bg/DNALab/inputs/aliens/gujh.png",
 
-    "vaxr": "images/bg/DNALab/inputs/aliens/vaxr.png"
+    "vaxr": "images/bg/DNALab/inputs/aliens/vaxr.png",
+
+    "unoi": "images/bg/DNALab/inputs/aliens/unoi.png"
 }

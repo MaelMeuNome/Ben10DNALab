@@ -557,6 +557,7 @@ var aliens = [
     { name: "Ghostfreak", "code": "rsam" },
     { name: "Cannonbolt", "code": "swor" },
     { name: "Wildvine", "code": "rame" },
+    { name: "Spitter", "code": "unoi" },
     { name: "Blitzwolfer", "code": "ypet" },
     { name: "Perk Upchuck", "code": "bafa" },
     { name: "Snare-oh", "code": "ansn" },
